@@ -1,27 +1,20 @@
-name: Deploy Lambda Function
-
+name: Deploying multiple Lambdas
 on:
   push:
-    branches: [ master ]
-
+    branches:
+      - main
 jobs:
-  deploy_lambda:
+  lambda:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Install zip tool
-        uses: montudor/actions-zip@v1
-      - name: Create Zip file for Lambda function
-        run: cd src && zip -r code.zip .
-      - name: AWS CLI v2
-        uses: imehedi/actions-awscli-v2@latest
-        with: 
-          args: "lambda update-function-code \
-            --function-name arn:aws:lambda:us-east-1:873717063745:function:identificar-cliente-lambda \
-            --zip-file fileb://src/code.zip"
-
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRETS_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-east-1"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - run: zip -j lambda.zip ./src/index.js
+      - run: aws lambda update-function-code --function-name=arn:aws:lambda:us-east-1:873717063745:function:identificar-cliente-lambda --zip-file=fileb://lambda.zip
