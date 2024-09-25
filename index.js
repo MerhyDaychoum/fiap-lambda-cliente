@@ -1,4 +1,4 @@
-export const handler = async (event, context) => {
+module.exports.handler = async (event, context) => {
     // Simulação do objeto mockado
     const mockResponse = {
       id: null,
