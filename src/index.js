@@ -2,8 +2,8 @@ export const handler = async (event, context) => {
     // Simulação do objeto mockado
     const mockResponse = {
       id: null,
-      nome: 'Nome Completo',
-      email: 'seuemail@gmail.com',
+      nome: 'Merhy Daychoum',
+      email: 'merhy@gmail.com',
       cpf: '70234146060'
     };
   
